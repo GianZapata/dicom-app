@@ -22,12 +22,14 @@ export default function Home() {
   })
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
+      toast.loading('Iniciando sesión...')
       try {
         const response = await signIn('credentials', {
           email: data.email,
           password: data.password,
           redirect: false,
         })
+        toast.dismiss()
         if( !response || ! response.ok) {
           throw new Error('No se pudo iniciar sesión, revisa tus credenciales.')
         }
