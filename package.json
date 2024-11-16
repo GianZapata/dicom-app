@@ -15,6 +15,7 @@
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "@prisma/client": "^5.22.0",
+    "bcrypt": "^5.1.1",
     "dcmjs": "^0.35.0",
     "dicom-parser": "^1.8.21",
     "next": "14.2.1",
@@ -23,10 +24,12 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.53.1",
+    "react-hot-toast": "^2.4.1",
     "uuid": "^11.0.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/pngjs": "^6.0.5",
     "@types/react": "^18",
