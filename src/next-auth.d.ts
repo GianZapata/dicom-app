@@ -20,7 +20,7 @@ declare module '@auth/core/jwt' {
 
 declare module 'next-auth' {
   interface Session extends DefaultSession {
-    userType: string;
+    userType: UserType;
     user: UserEntity;
   }
 

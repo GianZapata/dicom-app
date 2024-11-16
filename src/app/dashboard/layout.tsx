@@ -1,3 +1,5 @@
+import { authConfig } from '@/auth.config'
+import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { ReactNode } from 'react'
 
@@ -7,27 +9,16 @@ interface Props {
    patient: ReactNode
 }
 
-type UserType = 'doctor' | 'hospital' | 'patient'
 
-interface User {
-   id: number;
-   name: string;
-   email: string;
-   userType: UserType
-}
 
-const user: User = {
-   id: 1,
-   name: 'Gian',
-   email: 'gian@gian.com',
-   userType: "patient"
-};
+const Layout = async ({ hospital, doctor, patient }: Props) => {
 
-const Layout = ({ hospital, doctor, patient }: Props) => {
-   
-   if( user.userType === 'doctor') return <>{ doctor }</>
-   if( user.userType === 'hospital') return <>{ hospital }</>
-   if( user.userType === 'patient') return <>{ patient }</>
+   const session = await getServerSession(authConfig);
+   if (!session || !session.userType) return redirect("/auth/login");
+
+   if( session.userType === 'DOCTOR') return <>{ doctor }</>
+   if( session.userType === 'HOSPITAL') return <>{ hospital }</>
+   if( session.userType === 'PATIENT') return <>{ patient }</>
 
    return redirect('/auth/login')
 }
