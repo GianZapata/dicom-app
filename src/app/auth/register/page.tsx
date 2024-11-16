@@ -9,18 +9,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 export default function Home() {
    
    const { control, handleSubmit, formState } = useForm<RegisterSchema>({
-      defaultValues: {
-         password: '123'
-      },
       resolver: zodResolver(registerSchema)
    })
-
-   console.log( formState.errors )
 
    const onSubmit: SubmitHandler<RegisterSchema> = (data) => {
       console.log(data)
    }
-   
+
+   console.log('hola')
+
    return (
       <>
          <Toolbar />
