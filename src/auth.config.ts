@@ -1,5 +1,7 @@
 import { AuthOptions} from 'next-auth'
 import CredentialsProvider from "next-auth/providers/credentials";
+import { loginSchema } from './schemas/auth.schema';
+import { loginAction } from './actions/auth.action';
 
 export const authConfig: AuthOptions = {
    providers: [
@@ -10,30 +12,18 @@ export const authConfig: AuthOptions = {
             password: { label: "Password", tGype: "password" }
          },
          type: "credentials",
-         async authorize(credentials, req) {
-
-            console.log(credentials);
-            
-            throw new Error("Invalid credentials");
-
-            // const parsedCredentials = loginSchema.safeParse(credentials);
-
-            // if(!parsedCredentials.success) return null;
-
-            // const { email, password } = parsedCredentials.data;
-
-            // console.log({ email, password })
-            // const response = await UseCases.loginUseCase({ email, password });
-            
-            // if(!response) throw new Error("Invalid credentials");
-            
-            // const { user, token } = response;
-
-            // return {
-            //    id: String(user.id),
-            //    name: user.name,
-            //    accessToken: token,
-            // };
+         async authorize(credentials) {
+            const parsedCredentials = loginSchema.safeParse(credentials);
+            if(!parsedCredentials.success) return null;
+            try {
+               const { data } = await loginAction(parsedCredentials.data);
+               return {
+                  ...data,
+                  id: String(data.id),
+               }
+            } catch (error) {
+               throw new Error("Invalid credentials");
+            }
          },
       }),
    ]

@@ -1,16 +1,32 @@
 "use server"
 
 import { prismaClient } from "@/config/prisma.client"
-import { registerSchema, RegisterSchema } from "@/schemas/auth.schema"
+import { UserEntity } from "@/next-auth"
+import { loginSchema, LoginSchema, registerSchema, RegisterSchema } from "@/schemas/auth.schema"
+import { User } from "@prisma/client"
 import bcrypt from 'bcrypt'
 
 interface Response {
-   data: any
+   data: UserEntity
    message: string
 }
 
-export const loginAction = () => {
+export const loginAction = async ( data: LoginSchema ): Promise<Response> => {
+   
+   const credentials = loginSchema.safeParse(data)
+   if(!credentials.success) throw new Error('Las credenciales no son válidas, revisa tus datos.')
 
+   const { email, password } = credentials.data
+
+   const user = await prismaClient.user.findFirst({ where: { email },  })
+   if(!user) throw new Error('Las credenciales no son válidas, revisa tus datos.')
+
+   const passwordMatch = await bcrypt.compare(password, user.password)
+   if(!passwordMatch) throw new Error('Las credenciales no son válidas, revisa tus datos.')
+
+   const { password: _, ...userWithoutPassword } = user
+
+   return { data: userWithoutPassword, message: 'Inicio de sesión exitoso' };
 }
 
 export const registerAction = async ( data: RegisterSchema ): Promise<Response> => {
@@ -31,8 +47,8 @@ export const registerAction = async ( data: RegisterSchema ): Promise<Response> 
 
    // Encriptar la contraseña del usuario 
    const hashedPassword = await bcrypt.hash(password, 10)
+   
    // Guardar el usuario.
-
    const createdUser = await prismaClient.user.create({
       data: {
          name,
