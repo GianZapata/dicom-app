@@ -1,35 +1,41 @@
 "use client"
 
-import { registerSchema, RegisterSchema, UserType } from "@/schemas/auth.schema";
-import { Button, Container, Grid2, MenuItem, TextField, Toolbar, Typography } from "@mui/material";
+import { CustomError, registerSchema, RegisterSchema, UserType } from "@/schemas/auth.schema";
+import { Box, Button, Container, Grid2, Link, MenuItem, TextField, Toolbar, Typography } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerAction } from "@/actions/auth.action";
 import { toast, } from "react-hot-toast";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-   
+   const router = useRouter()
    const { control, handleSubmit, formState } = useForm<RegisterSchema>({
       resolver: zodResolver(registerSchema),
-      defaultValues: {
-         name: 'Gian',
-         email: 'gian@gian.com',
-         password: '123456',
-         userType: UserType.HOSPITAL
-      }
    })
 
    const onSubmit: SubmitHandler<RegisterSchema> = async (data) => {
-      toast.promise(registerAction(data), {
-         loading: 'Creando tu cuenta...',
-         success: ({ message }) => {
-            return message
-         },
-         error: ({ message }) => {
-            return message
-         }
-      })
+      const loadingToastId = toast.loading('Creando tu cuenta...')
+
+      try {
+         const { message } = await registerAction(data)
+
+         await signIn('credentials', {
+            email: data.email,
+            password: data.password,
+            redirect: false,
+         })
+
+         toast.dismiss(loadingToastId)
+         toast.success(message)
+         router.push('/dashboard')
+      } catch (error) {
+         loadingToastId && toast.dismiss(loadingToastId)
+         if( error instanceof CustomError ) return toast.error(error.message)
+         return toast.error('Hubo un error al crear tu cuenta')
+      }
    }
 
    return (
@@ -129,6 +135,10 @@ export default function Home() {
                   </Grid2>
                </Grid2>
             </form>
+
+            <Box>
+               <Typography textAlign="center">¿Ya tienes una cuenta? <Link href="/auth/login">Inicia sesión</Link></Typography>
+            </Box>
          </Container>
       </>
    );

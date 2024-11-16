@@ -1,7 +1,7 @@
 "use client"
 
-import { loginSchema, LoginSchema, registerSchema, RegisterSchema, UserType } from "@/schemas/auth.schema";
-import { Button, Container, Grid2, MenuItem, TextField, Toolbar, Typography } from "@mui/material";
+import { CustomError, loginSchema, LoginSchema, registerSchema, RegisterSchema, UserType } from "@/schemas/auth.schema";
+import { Box, Button, Container, Grid2, Link, MenuItem, TextField, Toolbar, Typography } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,29 +15,27 @@ export default function Home() {
   const router = useRouter()
   const { control, handleSubmit, formState: { errors } } = useForm<LoginSchema>({
       resolver: zodResolver(loginSchema),
-      defaultValues: {
-        email: 'gian@gian.com',
-        password: '123456',
-      }
   })
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
-      toast.loading('Iniciando sesión...')
+    const loadingToastId = toast.loading('Iniciando sesión...')
       try {
         const response = await signIn('credentials', {
           email: data.email,
           password: data.password,
           redirect: false,
         })
-        toast.dismiss()
+        toast.dismiss(loadingToastId)
         if( !response || ! response.ok) {
-          throw new Error('No se pudo iniciar sesión, revisa tus credenciales.')
+          throw new CustomError('No se pudo iniciar sesión, revisa tus credenciales.')
         }
         toast.success('Inicio de sesión exitoso')
         router.push('/dashboard')
-      } catch (error: any) {
-        toast.error(error.message)
-      }
+      } catch (error) {
+        loadingToastId && toast.dismiss(loadingToastId)
+        if( error instanceof CustomError) return toast.error(error.message)
+        toast.error('No se pudo iniciar sesión, revisa tus credenciales.')
+      } 
   }
 
   return (
@@ -96,6 +94,9 @@ export default function Home() {
                     </Grid2>
                 </Grid2>
               </form>
+              <Box textAlign="center" mt={2}>
+                <Typography variant="body2">¿No tienes cuenta? <Link href="/auth/register">Regístrate</Link></Typography>
+              </Box>
           </Container>
         </>
   );

@@ -25,3 +25,12 @@ export const registerSchema = z.object({
 })
 
 export type RegisterSchema = z.infer<typeof registerSchema>
+
+
+
+export class CustomError extends Error {
+   constructor(message: string) {
+      super(message)
+      this.name = 'CustomError'
+   }
+}
