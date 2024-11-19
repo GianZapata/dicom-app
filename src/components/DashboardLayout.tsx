@@ -49,18 +49,18 @@ export const hospitalMenuItems: CustomMenuItem[] = [
 ]
 
 export const patientMenuItems: CustomMenuItem[] = [
-   {
-      title: 'Dashboard',
-      icon: <DashboardIcon />,
-      menuItems: [
-         {
-            title: 'Pacientes',
-            icon: <PeopleIcon aria-hidden='true' fontSize='small' />,
-            href: '/dashboard/patients',
-            isEnabled: true
-         },
-      ]
-   }
+    {
+        title: 'Dashboard',
+        icon: <DashboardIcon />,
+        menuItems: [
+          {
+              title: 'Mis estudios',
+              icon: <PeopleIcon aria-hidden='true' fontSize='small' />,
+              href: '/dashboard/studies',
+              isEnabled: true
+          },
+        ]
+    }
 ]
 
 export const DASHBOARD_DRAWER_WIDTH = 240;
@@ -148,9 +148,9 @@ export const DashboardLayout: FC<PropsWithChildren<DashboardLayoutProps>> = ({
             <Typography
               variant='h6'
               noWrap
-              
+              fontWeight='800'
             >
-              PIA
+              PIA APP
             </Typography>
           </Box>
         </Toolbar>

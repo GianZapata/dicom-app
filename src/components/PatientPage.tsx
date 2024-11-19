@@ -10,11 +10,11 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 
-interface PatientWithAttachments extends User {
+export interface PatientWithAttachments extends User {
    attachments: PatientAttachment[]
 }
 
-interface PatientAttachment extends UserAttachment {
+export interface PatientAttachment extends UserAttachment {
    attachment: Attachment
 }
 
