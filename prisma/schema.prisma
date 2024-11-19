@@ -19,6 +19,8 @@ model User {
   name      String
   password  String 
   userType  UserType
+
+  attachments  UserAttachment[]
 }
 
 enum UserType {
@@ -34,4 +36,16 @@ model Attachment {
   path          String
   extension     String
   mimeType      String
+
+  users UserAttachment[]
+}
+
+model UserAttachment {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  attachmentId  Int
+  user          User     @relation(fields: [userId], references: [id])
+  attachment    Attachment @relation(fields: [attachmentId], references: [id])
+
+  @@unique([userId, attachmentId])
 }

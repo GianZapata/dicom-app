@@ -54,9 +54,6 @@ export const uploadFileAction = async (formData: FormData): Promise<DataResponse
             path: storagePath,
          }
       })
-
-      console.log({ newAttachment})
-
       return { data: true, message: 'Archivo subido correctamente' }
    } catch (error) {
       return { data: false, message: 'Hubo un error en subir el archivo' }

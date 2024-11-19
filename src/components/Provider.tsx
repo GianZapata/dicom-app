@@ -8,7 +8,7 @@ import { Toaster } from 'react-hot-toast';
 
 const darkTheme = createTheme({
    palette: {
-      mode: 'dark',
+      mode: 'light',
       primary: {
          main: '#2c359a'
       }

@@ -40,7 +40,6 @@ export const authConfig: AuthOptions = {
 
   callbacks: {
    async jwt({ user, account, token, trigger }) {
-      console.log({ user, account, token, trigger });
      switch (trigger) {
        case 'signIn':
          if (!account) break;
@@ -63,7 +62,6 @@ export const authConfig: AuthOptions = {
      const newSession = session as Session;
      newSession.user = token.user;
      newSession.userType = token.userType;
-     console.log({ session, token });
      return newSession;
    }
  }

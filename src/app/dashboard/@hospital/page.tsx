@@ -1,8 +1,6 @@
 
 const Page = () => {
-  return (
-    <div>Soy un hospital</div>
-  )
+  return null
 }
 
 export default Page
