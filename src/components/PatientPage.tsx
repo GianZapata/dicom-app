@@ -9,17 +9,10 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, 
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-
-export interface PatientWithAttachments extends User {
-   attachments: PatientAttachment[]
-}
-
-export interface PatientAttachment extends UserAttachment {
-   attachment: Attachment
-}
+import { PatientWithAttachments } from '@/types/user.interface';
 
 interface PatientPageProps {
-   patients: PatientWithAttachments[]  
+   patients: PatientWithAttachments[]
 }
 
 export const PatientPage : FC<PatientPageProps> = ({ patients }) => {
@@ -59,7 +52,7 @@ export const PatientPage : FC<PatientPageProps> = ({ patients }) => {
                   <TableCell>{patient.name}</TableCell>
                   <TableCell>{patient.email}</TableCell>
                   <TableCell>
-                     <Tooltip title="Ver archivos">
+                     <Tooltip title="Ver estudios">
                         <IconButton
                            onClick={() => onOpen(patient)}
                         >
@@ -89,7 +82,7 @@ interface PatientDialogProps {
    onClose: () => void
 }
 
-const PatientDialog = ({ patient, isOpen, onClose }:PatientDialogProps) => {
+export const PatientDialog = ({ patient, isOpen, onClose }:PatientDialogProps) => {
    return (
       <Dialog
          open={isOpen}
@@ -99,7 +92,7 @@ const PatientDialog = ({ patient, isOpen, onClose }:PatientDialogProps) => {
       >
          <DialogTitle>
             <Typography variant="h5" fontWeight={800}>
-               Archivos del paciente: {patient.name}
+               Estudios del paciente: {patient.name}
             </Typography>
          </DialogTitle>
 

@@ -24,7 +24,7 @@ export const doctorMenuItems: CustomMenuItem[] = [
       icon: <DashboardIcon />,
       menuItems: [
          {
-            title: 'Pacientes',
+            title: 'Mis pacientes',
             icon: <PeopleIcon aria-hidden='true' fontSize='small' />,
             href: '/dashboard/patients',
             isEnabled: true

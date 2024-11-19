@@ -20,6 +20,10 @@ model User {
   password  String 
   userType  UserType
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+
+  doctorId Int?
   attachments  UserAttachment[]
 }
 
@@ -37,6 +41,9 @@ model Attachment {
   extension     String
   mimeType      String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+
   users UserAttachment[]
 }
 
@@ -46,6 +53,10 @@ model UserAttachment {
   attachmentId  Int
   user          User     @relation(fields: [userId], references: [id])
   attachment    Attachment @relation(fields: [attachmentId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now()) 
+  
 
   @@unique([userId, attachmentId])
 }

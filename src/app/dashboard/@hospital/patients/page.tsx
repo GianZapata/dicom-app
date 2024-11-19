@@ -5,14 +5,9 @@ const Page = async () => {
 
   const patients = await prismaClient.user.findMany({ 
     where: { userType: 'PATIENT' },
-    include: {
-      attachments: {
-        include: {
-          attachment: true
-        }
-      }
-    }
+    select: { id: true, name: true, email: true, userType: true, attachments: { include: { attachment: true }}, }
   })
+  
   return <PatientPage patients={patients} />
 }
 
